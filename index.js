@@ -8,19 +8,19 @@ module.exports = function(config) {
   var username = config.username
   var password = config.password
 
-  http.createServer(function(req, res){
-    var credentials = auth(req)
+  http.createServer(function(request, response){
+    var credentials = auth(request)
     var unauthenticated = !credentials || credentials.name !== username || credentials.pass !== password
     if (unauthenticated && process.env.NODE_ENV == 'production') {
-      res.writeHead(401, {
+      response.writeHead(401, {
         'WWW-Authenticate': 'Basic realm="' + config.realm + '"'
       })
-      res.end()
+      response.end()
     } else {
-      req.addListener('end', function () {
-        file.serve(req, res, function (e, res) {
+      request.addListener('end', function () {
+        file.serve(request, response, function (e, res) {
           if (e && (e.status === 404)) { // If the file wasn't found
-            file.serveFile('/index.html', 200, {}, req, res);
+            file.serveFile('/index.html', 200, {}, request, response);
           }
         });
       }).resume()
