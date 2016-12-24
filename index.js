@@ -19,7 +19,9 @@ module.exports = function(config) {
     } else {
       req.addListener('end', function () {
         file.serve(req, res, function (e, res) {
-          file.serveFile('/index.html', 200, {}, req, res);
+          if (e && (e.status === 404)) { // If the file wasn't found
+            file.serveFile('/index.html', 200, {}, req, res);
+          }
         });
       }).resume()
     }
