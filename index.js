@@ -19,7 +19,7 @@ module.exports = function(config) {
     } else {
       req.addListener('end', function () {
         file.serve(req, res, function (e, res) {
-          file.serveFile('./index.html', 200, {}, req, res);
+          file.serveFile('/index.html', 200, {}, req, res);
         });
       }).resume()
     }
